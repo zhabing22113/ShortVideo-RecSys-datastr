@@ -1,0 +1,11 @@
+venv/
+.venv/
+env/
+.env/
+ENV/
+__pycache__/
+*.pyc
+*.exe
+AGENTS.md
+.agent/
+.agents/
