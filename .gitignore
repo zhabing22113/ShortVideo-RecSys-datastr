@@ -6,6 +6,16 @@ ENV/
 __pycache__/
 *.pyc
 *.exe
+*.o
+*.obj
+*.out
 AGENTS.md
 .agent/
 .agents/
+.vscode/
+build/
+tests/build/
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

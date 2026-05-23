@@ -390,3 +390,79 @@ streamlit run app.py
 | 9 | 健身运动用户 |
 | 10 | 校园学习用户 |
 | 11 | 小剧场用户 |
+
+---
+
+## 项目构建流程
+
+### 1. 数据采集阶段
+
+首先通过爬虫从B站采集视频数据：
+- 使用 `datacollector/seeds_collector_2.py` 和 `datacollector/seeds_collector_3.py` 进行数据采集
+- 原始数据存储在 `data/raw/bilibili_10w_pro.csv`，包含10万+条视频信息
+
+### 2. C++ 核心模块编译与执行
+
+使用 `build.ps1` 脚本编译三个核心 C++ 程序：
+
+#### a) 构建视频目录
+- 程序：`src/data_builder/build_video_catalog.cpp`
+- 功能：清洗原始视频数据，计算视频质量分，生成主题向量
+- 输出：`data/processed/videos.csv`
+
+#### b) 生成行为模拟数据
+- 程序：`src/simulator/generate_behavior_data.cpp`
+- 功能：模拟1万+用户，生成用户浏览行为事件
+- 输出：`data/simulated/users.csv` 和 `data/simulated/events.csv`
+
+#### c) 生成向量数据
+- 程序：`src/common/generate_vectors.cpp`
+- 功能：基于用户行为数据生成用户兴趣向量和视频特征向量
+- 输出：
+  - `data/outputs/user_interest_vectors.csv` - 12维用户兴趣向量
+  - `data/outputs/video_feature_vectors.csv` - 26维视频特征向量
+  - `data/outputs/video_audience_vectors.csv` - 视频受众向量
+
+### 3. Python 前端可视化
+
+使用 Streamlit 构建可视化界面：
+- 依赖安装：`pip install -r requirements.txt`
+- 主程序：`app.py`
+- 运行方式：`streamlit run app.py`
+
+### 4. 项目技术特点
+
+核心算法（相似度计算、聚类、推荐等）在 C++ 中自行实现，不依赖现成的机器学习库，符合课程设计要求。
+
+### 构建流程总结
+
+```
+原始数据采集 (Python)
+    ↓
+C++ 模块编译 (build.ps1)
+    ↓
+数据处理与向量生成 (C++ 程序)
+    ↓
+可视化展示 (Streamlit)
+```
+
+---
+
+## 文件说明
+
+### 源代码目录
+
+- `src/clustering/` - 聚类算法实现
+- `src/common/` - 通用工具和向量生成
+- `src/data_builder/` - 视频数据处理
+- `src/recommender/` - 推荐系统核心
+- `src/similarity/` - 相似度计算
+- `src/simulator/` - 用户行为模拟
+- `src/ui/` - UI 相关
+
+### 数据目录
+
+- `data/raw/` - 原始采集数据
+- `data/processed/` - 清洗处理后的数据
+- `data/simulated/` - 模拟生成的用户行为数据
+- `data/outputs/` - 最终生成的向量数据
